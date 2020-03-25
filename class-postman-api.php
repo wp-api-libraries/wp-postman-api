@@ -59,6 +59,7 @@ if ( ! class_exists( 'PostmanAPI' ) ) {
 		 * @var string
 		 */
 		protected $route = '';
+
 		/**
 		 * __construct function.
 		 *
@@ -68,11 +69,9 @@ if ( ! class_exists( 'PostmanAPI' ) ) {
 		 */
 		function __construct( $api_key = null ) {
 			static::$api_key = $api_key;
-
-
 		}
 
-	/**
+		/**
 		 * Prepares API request.
 		 *
 		 * @param  string $route   API route to make the call to.
@@ -97,6 +96,7 @@ if ( ! class_exists( 'PostmanAPI' ) ) {
 			}
 			return $this;
 		}
+
 		/**
 		 * Fetch the request from the API.
 		 *
@@ -139,7 +139,6 @@ if ( ! class_exists( 'PostmanAPI' ) ) {
 					$tmp = explode( ';', $link );
 					$res = preg_match( '~<(.*?)>~', $tmp[0], $match );
 					if ( ! empty( $res ) ) {
-						// Some string magic to set array key. Changes 'rel="next"' => 'next'.
 						$key                 = str_replace( array( 'rel=', '"' ), '', trim( $tmp[1] ) );
 						$this->links[ $key ] = $match[1];
 					}
@@ -172,11 +171,187 @@ if ( ! class_exists( 'PostmanAPI' ) ) {
 			return ( 200 <= $code && 300 > $code );
 		}
 
-		// Collections.
+		// COLLECTIONS.
 
+		/**
+		 * [get_collections description]
+		 * @param  array  $args [description]
+		 * @return [type]       [description]
+		 */
 		public function get_collections( $args = array() ) {
 			return $this->build_request( '/collections', $args )->fetch();
 		}
+
+		/**
+		 * [get_collection description]
+		 * @param  [type] $collection_uid [description]
+		 * @param  array  $args           [description]
+		 * @return [type]                 [description]
+		 */
+		public function get_collection( $collection_uid, $args = array() ) {
+			return $this->build_request( '/collections/' . $collection_uid, $args )->fetch();
+		}
+
+		/**
+		 * Create Collection (https://schema.getpostman.com/json/collection/v2.0.0/docs/index.html)
+		 * @param  array  $args [description]
+		 * @return [type]       [description]
+		 */
+		public function create_collection( $args = array() ) {
+			return $this->build_request( '/collections', $args, 'POST' )->fetch();
+		}
+
+		/**
+		 * [update_collection description]
+		 * @param  [type] $collection_uid [description]
+		 * @param  array  $args           [description]
+		 * @return [type]                 [description]
+		 */
+		public function update_collection( $collection_uid, $args = array() ) {
+			return $this->build_request( '/collections/' . $collection_uid, $args, 'PUT' )->fetch();
+		}
+
+		/**
+		 * [delete_collection description]
+		 * @param  [type] $collection_uid [description]
+		 * @return [type]                 [description]
+		 */
+		public function delete_collection( $collection_uid ) {
+			return $this->build_request( '/collections/' . $collection_uid, null, 'DELETE' )->fetch();
+		}
+
+		// ENVIRONMENTS.
+
+		public function get_environments( $args = array() ) {
+			return $this->build_request( '/environments', $args )->fetch();
+		}
+
+		public function get_environment( $environment_uid, $args = array() ) {
+			return $this->build_request( '/environments/' . $environment_uid, $args )->fetch();
+		}
+
+				/**
+				 * [create_workspace description]
+				 * @param  array  $args [description]
+				 * @return [type]       [description]
+				 */
+				public function create_environment( $args = array() ) {
+					return $this->build_request( '/environments', $args, 'POST' )->fetch();
+				}
+
+				/**
+				 * [update_workspace description]
+				 * @param  [type] $workspace_id [description]
+				 * @param  array  $args         [description]
+				 * @return [type]               [description]
+				 */
+				public function update_environment( $environment_uid, $args = array() ) {
+					return $this->build_request( '/environments/'. $environment_uid, $args, 'PUT' )->fetch();
+				}
+
+				/**
+				 * [delete_workspace description]
+				 * @param  [type] $workspace_id [description]
+				 * @return [type]               [description]
+				 */
+				public function delete_environment( $environment_uid ) {
+					return $this->build_request( '/environments/'. $environment_uid, null, 'DELETE' )->fetch();
+				}
+
+		// MOCKS.
+
+		// MONITORS.
+
+		/**
+		 * [get_monitors description]
+		 * @param  array  $args [description]
+		 * @return [type]       [description]
+		 */
+		public function get_monitors( $args = array() ) {
+			return $this->build_request( '/monitors', $args )->fetch();
+		}
+
+		// WORKSPACES.
+
+		/**
+		 * [get_workspaces description]
+		 * @param  array  $args [description]
+		 * @return [type]       [description]
+		 */
+		public function get_workspaces( $args = array() ) {
+			return $this->build_request( '/workspaces', $args )->fetch();
+		}
+
+		/**
+		 * [get_workspace description]
+		 * @param  [type] $workspace_id [description]
+		 * @param  array  $args         [description]
+		 * @return [type]               [description]
+		 */
+		public function get_workspace( $workspace_id, $args = array() ) {
+			return $this->build_request( '/workspaces/' . $workspace_id, $args )->fetch();
+		}
+
+		/**
+		 * [create_workspace description]
+		 * @param  array  $args [description]
+		 * @return [type]       [description]
+		 */
+		public function create_workspace( $args = array() ) {
+			return $this->build_request( '/workspaces/', $args, 'POST' )->fetch();
+		}
+
+		/**
+		 * [update_workspace description]
+		 * @param  [type] $workspace_id [description]
+		 * @param  array  $args         [description]
+		 * @return [type]               [description]
+		 */
+		public function update_workspace( $workspace_id, $args = array() ) {
+			return $this->build_request( '/workspaces/'. $workspace_id, $args, 'PUT' )->fetch();
+		}
+
+		/**
+		 * [delete_workspace description]
+		 * @param  [type] $workspace_id [description]
+		 * @return [type]               [description]
+		 */
+		public function delete_workspace( $workspace_id ) {
+			return $this->build_request( '/workspaces/'. $workspace_id, null, 'DELETE' )->fetch();
+		}
+
+		// USER.
+
+		/**
+		 * Get Me (Myself).
+		 * @return object Results from Me.
+		 */
+		public function get_me() {
+			return $this->build_request( '/me' )->fetch();
+		}
+
+		// IMPORT.
+
+		/**
+		 * [import_external_api description]
+		 * @param  [type] $import_type [description]
+		 * @param  array  $args        [description]
+		 * @return [type]              [description]
+		 */
+		public function import_external_api( $import_type, $args = array() ) {
+			return $this->build_request( '/import/' . $import_type, $args, 'POST' )->fetch();
+		}
+
+		/**
+		 * [import_exported_data description]
+		 * @param  array  $args [description]
+		 * @return [type]       [description]
+		 */
+		public function import_exported_data( $args = array() ) {
+			return $this->build_request( '/import/exported', $args, 'POST' )->fetch();
+		}
+
+		// API.
 
 	}
 }
